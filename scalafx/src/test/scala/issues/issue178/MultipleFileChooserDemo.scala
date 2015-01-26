@@ -25,38 +25,41 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package scalafx.scene.control
-
-import javafx.scene.{control => jfxsc}
+package issues.issue178
 
 import scala.language.implicitConversions
-import scalafx.delegate.SFXDelegate
+import scalafx.Includes._
+import scalafx.application.JFXApp
+import scalafx.application.JFXApp.PrimaryStage
+import scalafx.geometry.Insets
+import scalafx.scene.Scene
+import scalafx.scene.control.Button
+import scalafx.scene.layout.VBox
+import scalafx.stage.FileChooser
 
 /**
- * Object companion for [[scalafx.scene.control.SeparatorMenuItem]].
+ * Demo for Issue #178: FileChooser does not handle a the value returned when the user cancels file selection.
+ * If FileChooser.showOpenMultipleDialog was used and user cancelled selection an NPE was thrown.
+ *
  */
-object SeparatorMenuItem {
-  implicit def sfxSeparatorMenuItem2jfx(s: SeparatorMenuItem): jfxsc.SeparatorMenuItem = if (s != null) s.delegate else null
-}
+object MultipleFileChooserDemo extends JFXApp {
 
-/**
- * A [[MenuItem]] that as the name suggests allows for a horizontal Separator to be embedded within it,
- * by assigning a Separator to the content property of the [[CustomMenuItem]].
- *
- * Wraps a $JFX $URL0 $FC]].
- *
- * @constructor Creates a new $FC from a $JFX one.
- * @param delegate A $JFX $FC to be wrapped. Its default value is a new $JFX $FC.
- *
- * @define FC SeparatorMenuItem
- * @define URL0 [[http://docs.oracle.com/javafx/2/api/javafx/scene/control/SeparatorMenuItem.html
- * @define JFX JavaFX
- * @define ORIGINALDOC Original Documentation]].
- */
-class SeparatorMenuItem(override val delegate: jfxsc.SeparatorMenuItem)
-  extends CustomMenuItem(delegate)
-  with SFXDelegate[jfxsc.SeparatorMenuItem] {
-  def this() = {
-    this(new jfxsc.SeparatorMenuItem)
+  stage = new PrimaryStage {
+    scene = new Scene {
+      title = "Demo for Issue #178"
+      root = new VBox {
+        padding = Insets(12)
+        children = new Button {
+          text = "Open file chooser and select multiple files or Cancel"
+          onAction = handle {
+            val fc = new FileChooser()
+            val selection = fc.showOpenMultipleDialog(stage)
+
+            println("Selection: " + selection)
+          }
+        }
+      }
+    }
   }
+
 }
