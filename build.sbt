@@ -8,7 +8,7 @@ import scala.xml._
 // JAR_BUILT_BY      - Name to be added to Jar metadata field "Built-By" (defaults to System.getProperty("user.name")
 //
 
-val scalafxVersion = "2.2.67-R11-SNAPSHOT"
+val scalafxVersion = "2.2.76-R12-SNAPSHOT"
 val versionTagDir = if (scalafxVersion.endsWith("SNAPSHOT")) "SFX-2" else "v" + scalafxVersion
 
 // ScalaFX project
@@ -66,6 +66,7 @@ lazy val scalafxSettings = Seq(
   scalacOptions in(Compile, doc) ++= Opts.doc.title("ScalaFX API"),
   scalacOptions in(Compile, doc) ++= Opts.doc.version(scalafxVersion),
   scalacOptions in(Compile, doc) += s"-doc-external-doc:${scalaInstance.value.libraryJar}#http://www.scala-lang.org/api/${scalaVersion.value}/",
+  scalacOptions in(Compile, doc) ++= Seq("-doc-footer", s"ScalaFX API v.$scalafxVersion"),
   javacOptions ++= Seq(
     "-target", "1.6",
     "-source", "1.6",
